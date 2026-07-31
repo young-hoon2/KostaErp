@@ -1,7 +1,7 @@
 # EUM 🍽️ — 소상공인 식자재 관리 ERP
 
 > 식자재·메뉴·판매·폐기·통계를 관리하는 웹 서비스입니다.  
-> 1차 스프린트에서 Servlet/JSP 기반 MVC Model2 구조를 직접 구현하고, 후속 리팩터링에서 화면과 요청 흐름을 유지한 채 JDBC DAO를 MyBatis로 전환했습니다.
+> 1차 스프린트에서 Servlet/JSP 기반 MVC Model2 구조를 구현하고, 후속 리팩터링에서 화면과 요청 흐름을 유지한 채 개인 담당 식자재 추가·조회 DAO를 MyBatis로 전환했습니다.
 
 ![Java 8](https://img.shields.io/badge/Java-8-007396?logo=openjdk&logoColor=white)
 ![Servlet](https://img.shields.io/badge/Servlet%2FJSP-MVC_Model2-2C2255)
@@ -19,9 +19,9 @@
 | 기간 | **2026.04.08 ~ 2026.04.30** | **2026.05.07 ~ 2026.05.12** |
 | 인원 | 5명 | 4명 |
 | 목표 | 요구사항을 MVC Model2 웹 서비스로 구현 | JDBC DAO를 MyBatis로 전환 |
-| 데이터 접근 | JDBC · DBCP | MyBatis · Mapper XML |
-| 유지한 구조 | Front Controller · Command(Action) · JSP | URL · Action · JSP · DAO 인터페이스 |
-| 개인 담당 | 식자재 조회·삭제, 메뉴 조회·판매, 재고 차감 | 식자재 조회·등록 DAO 전환과 테스트 |
+| 데이터 접근 | JDBC · DriverManager | MyBatis · Mapper XML |
+| 구조 | Front Controller · Command(Action) · JSP | URL · Action · JSP 유지 · DAO 인터페이스 도입 |
+| 개인 담당 | 식자재 조회·삭제, 메뉴 조회·판매, 재고 차감 | 식자재 추가·조회 DAO 전환과 테스트 |
 
 ### 단계별 변화
 
@@ -40,13 +40,14 @@ Servlet/JSP + Front Controller + Action + JDBC
 ### 소프트웨어 아키텍처
 
 ![1차 JDBC 소프트웨어 아키텍처](architecture-jdbc.jpg)
+> 다이어그램의 DBCP는 당시 작성한 클래스명이며, 실제 구현은 커넥션 풀 라이브러리가 아닌 DriverManager 기반 연결 방식입니다.
 
 | 계층 | 구성 요소 | 역할 |
 | --- | --- | --- |
 | Controller | `FrontControllerServlet` | 모든 요청의 단일 진입점 |
 | Factory | `ActionFactory` | `cmd` 값에 맞는 Action 객체 선택 |
 | Command | `Action` 구현체 | 요청별 업무 처리와 화면 경로 반환 |
-| Persistence | DAO · DBCP · Query | JDBC 연결, SQL 실행, 결과 매핑 |
+| Persistence | DAO · DriverManager · Query | JDBC 연결, SQL 실행, 결과 매핑 |
 | Model | VO | 계층 간 데이터 전달 |
 | View | JSP · JSTL · JavaScript · jQuery | 화면 렌더링과 사용자 입력 처리 |
 
@@ -61,7 +62,7 @@ ActionFactory.getAction(cmd)
           ↓
 Action.execute(request)
           ↓
-DAO → JDBC/DBCP → Oracle
+DAO → JDBC(DriverManager) → Oracle
           ↓
 request.setAttribute(...)
           ↓
@@ -75,7 +76,7 @@ JSP forward
 | 식자재 조회 | 목록, 검색, 정렬, 페이징, 카테고리 필터 |
 | 식자재 삭제 | 선택 항목과 연관 데이터 삭제 순서 처리 |
 | 메뉴 조회 | 메뉴 목록·상세, 메뉴별 구성 식자재 조회 |
-| 메뉴 판매 | 판매 수량 검증, 필요 식자재 계산, 재고 차감 |
+| 메뉴 판매 | 판매 수량 반영, 필요 식자재 계산, 부족 재고 확인, 재고 차감 |
 | 검증 | DAO 단위 테스트와 DB 결과 확인 |
 
 ### 주요 구현 포인트
@@ -90,7 +91,7 @@ JSP forward
 
 ```text
 판매 요청
-  → 판매 수량 검증
+  → 판매 수량 입력값 확인
   → 메뉴 구성 식자재와 사용 중량 조회
   → 판매 수량을 반영한 필요 중량 계산
   → 부족 재고 확인
@@ -128,9 +129,9 @@ USED 삭제 → DISPOSALS 삭제 → FOODM 삭제
 
 ### 점진적 전환 방식
 
-- DAO 인터페이스를 기준으로 JDBC 구현과 MyBatis 구현을 분리했습니다.
+- DAO 인터페이스를 도입해 JDBC 구현과 MyBatis 구현을 분리했습니다.
 - 화면과 요청 처리 구조는 그대로 두고 데이터 접근 계층만 교체했습니다.
-- 개인 담당 식자재 조회·등록 DAO부터 전환하고 테스트로 동일 결과를 확인했습니다.
+- 개인 담당 식자재 추가·조회 DAO부터 전환하고 테스트로 동일 결과를 확인했습니다.
 
 ### 정량적 결과
 
@@ -194,7 +195,7 @@ FROM FOODM
 | Language | Java 8 | Java 8 |
 | Backend | Servlet, JSP, JSTL | Servlet, JSP, JSTL |
 | Architecture | MVC Model2, Front Controller, Command | 기존 구조 유지 |
-| Persistence | JDBC, DBCP | MyBatis 3.2.3, Mapper XML |
+| Persistence | JDBC(DriverManager) | MyBatis 3.2.3, Mapper XML |
 | Frontend | HTML, CSS, JavaScript, jQuery | 기존 화면 유지 |
 | Database | Oracle | Oracle |
 | Server | Apache Tomcat | Apache Tomcat |
