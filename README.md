@@ -30,7 +30,7 @@
 Servlet/JSP + Front Controller + Action + JDBC
                          ↓
 1차 리팩터링
-화면·요청 구조 유지 + DAO 구현을 MyBatis로 교체
+화면·요청 구조 유지 + DAO 구현을 MyBatis로 점진적 교체
 ```
 
 ---
