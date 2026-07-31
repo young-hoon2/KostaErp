@@ -51,7 +51,8 @@
 	</select>
 	
 	<select id="getFoodMaterialList" parameterType="map" resultType="com.kostaErp.model.VO.foodMaterialVO">
-
+		SELECT *
+    	FROM (
 		SELECT ROW_NUMBER() OVER (ORDER BY ${orderBy}) AS rn,
 		f.foodMaterial_Id AS foodMaterialId, f.foodMaterialName, c.foodCategory,
 		f.foodMaterialCount, f.foodMaterialCountAll, f.foodMaterialPrice,
