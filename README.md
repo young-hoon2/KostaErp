@@ -1,7 +1,7 @@
 # EUM 🍽️ — 소상공인 식자재 관리 ERP
 
 > 식자재·메뉴·판매·폐기·통계를 관리하는 웹 서비스입니다.  
-> 1차 스프린트에서 Servlet/JSP 기반 MVC Model2 구조를 구현하고, 후속 리팩터링에서 화면과 요청 흐름을 유지한 채 개인 담당 식자재 추가·조회 DAO를 MyBatis로 전환했습니다.
+> 1차 스프린트에서 Servlet/JSP 기반 MVC Model2 구조를 구현하고, 후속 리팩토링에서 화면과 요청 흐름을 유지한 채 개인 담당 식자재 추가·조회 DAO를 MyBatis로 전환했습니다.
 
 ![Java 8](https://img.shields.io/badge/Java-8-007396?logo=openjdk&logoColor=white)
 ![Servlet](https://img.shields.io/badge/Servlet%2FJSP-MVC_Model2-2C2255)
@@ -14,7 +14,7 @@
 
 ## 📌 프로젝트 개요
 
-| 항목 | 1차 스프린트 | 1차 리팩터링 |
+| 항목 | 1차 스프린트 | 1차 리팩토링 |
 | --- | --- | --- |
 | 기간 | **2026.04.08 ~ 2026.04.30** | **2026.05.07 ~ 2026.05.12** |
 | 인원 | 5명 | 4명 |
@@ -29,7 +29,7 @@
 1차 스프린트
 Servlet/JSP + Front Controller + Action + JDBC
                          ↓
-1차 리팩터링
+1차 리팩토링
 화면·요청 구조 유지 + DAO 구현을 MyBatis로 점진적 교체
 ```
 
@@ -112,13 +112,13 @@ USED 삭제 → DISPOSALS 삭제 → FOODM 삭제
 
 ---
 
-## 2️⃣ 1차 리팩터링 — JDBC → MyBatis
+## 2️⃣ 1차 리팩토링 — JDBC → MyBatis
 
-### 리팩터링 소프트웨어 아키텍처
+### 리팩토링 소프트웨어 아키텍처
 
-![MyBatis 리팩터링 소프트웨어 아키텍처](architecture-mybatis.jpg)
+![MyBatis 리팩토링 소프트웨어 아키텍처](architecture-mybatis.jpg)
 
-> 리팩터링에서는 MyBatis의 `POOLED` DataSource를 사용하고, `DBCPMybatis`에서 단일 `SqlSessionFactory`를 생성해 재사용했습니다.
+> 리팩토링에서는 MyBatis의 `POOLED` DataSource를 사용하고, `DBCPMybatis`에서 단일 `SqlSessionFactory`를 생성해 재사용했습니다.
 
 ### 변경 범위
 
@@ -193,7 +193,7 @@ FROM FOODM
 
 ## 🛠️ 기술 스택
 
-| 구분 | 1차 스프린트 | 1차 리팩터링 |
+| 구분 | 1차 스프린트 | 1차 리팩토링 |
 | --- | --- | --- |
 | Language | Java 8 | Java 8 |
 | Backend | Servlet, JSP, JSTL | Servlet, JSP, JSTL |
@@ -250,4 +250,4 @@ KostaErp
 ## 🔗 다음 단계
 
 - [2·3차 Spring Boot 백엔드](https://github.com/young-hoon2/KostaErpServer)
-- [3차 React 프런트엔드](https://github.com/young-hoon2/eum)
+- [3차 React 프론트엔드](https://github.com/young-hoon2/eum)
