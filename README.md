@@ -40,7 +40,8 @@ Servlet/JSP + Front Controller + Action + JDBC
 ### 소프트웨어 아키텍처
 
 ![1차 JDBC 소프트웨어 아키텍처](architecture-jdbc.jpg)
-> 다이어그램의 DBCP는 당시 작성한 클래스명이며, 실제 구현은 커넥션 풀 라이브러리가 아닌 DriverManager 기반 연결 방식입니다.
+
+> 1차의 `DBCP` 클래스는 싱글톤으로 DB 연결 생성 로직을 관리했지만, `Connection`은 `DriverManager.getConnection()` 호출 시마다 생성했으므로 커넥션 풀 구현은 아닙니다.
 
 | 계층 | 구성 요소 | 역할 |
 | --- | --- | --- |
@@ -117,6 +118,8 @@ USED 삭제 → DISPOSALS 삭제 → FOODM 삭제
 
 ![MyBatis 리팩터링 소프트웨어 아키텍처](architecture-mybatis.jpg)
 
+> 리팩터링에서는 MyBatis의 `POOLED` DataSource를 사용하고, `DBCPMybatis`에서 단일 `SqlSessionFactory`를 생성해 재사용했습니다.
+
 ### 변경 범위
 
 | 구분 | Before: JDBC | After: MyBatis |
@@ -130,7 +133,7 @@ USED 삭제 → DISPOSALS 삭제 → FOODM 삭제
 ### 점진적 전환 방식
 
 - DAO 인터페이스를 도입해 JDBC 구현과 MyBatis 구현을 분리했습니다.
-- 화면과 요청 처리 구조는 그대로 두고 데이터 접근 계층만 교체했습니다.
+- 화면과 요청 처리 구조는 유지하고 데이터 접근 계층을 중심으로 점진적으로 교체했습니다.
 - 개인 담당 식자재 추가·조회 DAO부터 전환하고 테스트로 동일 결과를 확인했습니다.
 
 ### 정량적 결과
