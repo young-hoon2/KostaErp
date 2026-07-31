@@ -39,7 +39,7 @@ Servlet/JSP + Front Controller + Action + JDBC
 
 ### 소프트웨어 아키텍처
 
-![1차 JDBC 소프트웨어 아키텍처](docs/images/architecture-jdbc.jpg)
+![1차 JDBC 소프트웨어 아키텍처](architecture-jdbc.jpg)
 
 | 계층 | 구성 요소 | 역할 |
 | --- | --- | --- |
@@ -114,7 +114,7 @@ USED 삭제 → DISPOSALS 삭제 → FOODM 삭제
 
 ### 리팩터링 소프트웨어 아키텍처
 
-![MyBatis 리팩터링 소프트웨어 아키텍처](docs/images/architecture-mybatis.jpg)
+![MyBatis 리팩터링 소프트웨어 아키텍처](architecture-mybatis.jpg)
 
 ### 변경 범위
 
@@ -173,7 +173,7 @@ FROM FOODM
 
 ## 🗃️ 데이터베이스 설계
 
-![EUM ERD](docs/images/erd.jpg)
+![EUM ERD](erd.jpg)
 
 | 핵심 테이블 | 설명 |
 | --- | --- |
