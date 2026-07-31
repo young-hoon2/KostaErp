@@ -249,5 +249,5 @@ KostaErp
 
 ## 🔗 다음 단계
 
-- [2·3차 Spring Boot 백엔드](https://github.com/y0ung-hoon2/KostaErpServer)
-- [3차 React 프런트엔드](https://github.com/y0ung-hoon2/eum)
+- [2·3차 Spring Boot 백엔드](https://github.com/young-hoon2/KostaErpServer)
+- [3차 React 프런트엔드](https://github.com/young-hoon2/eum)
