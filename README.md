@@ -21,7 +21,7 @@
 | 목표 | 요구사항을 MVC Model2 웹 서비스로 구현 | JDBC DAO를 MyBatis로 전환 |
 | 데이터 접근 | JDBC · DriverManager | MyBatis · Mapper XML |
 | 구조 | Front Controller · Command(Action) · JSP | URL · Action · JSP 유지 · DAO 인터페이스 도입 |
-| 개인 담당 | 식자재 조회·삭제, 메뉴 조회·판매, 재고 차감 | 식자재 추가·조회 DAO 전환과 테스트 |
+| 개인 담당 | FrontControllerServlet·ActionFactory·Action 구현, 식자재 조회·삭제, 메뉴 조회·판매, 재고 차감 | 식자재 추가·조회 DAO 전환과 테스트 |
 
 ### 단계별 변화
 
